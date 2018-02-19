@@ -29,9 +29,17 @@ normal = zeros(h, w, 3);
 %   albedo at this point is |g|
 %   normal at this point is g / |g|
 
-
-
-% =========================================================================
-
+for m = 1 : h
+    for n = 1 : w
+        i = squeeze(image_stack(m, n, :)) ;
+        scriptI = diag(i) ;
+        scriptI_i = scriptI * i ;
+        scriptI_V = scriptI * scriptV ;
+        [g, ~] = linsolve(scriptI_V, scriptI_i) ;
+        albedo(m, n, :) = norm(g) ;
+        normal(m, n, :) = g / norm(g) ;
+    end
 end
+end
+
 

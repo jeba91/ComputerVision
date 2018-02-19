@@ -22,9 +22,14 @@ switch path_type
         % for each pixel in the left column of height_map
         %   height_value = previous_height_value + corresponding_q_value
         
+        for m = 2:h
+            height_map(m,1) = height_map(m-1,1) + q(m,1);
+        end
+        
         % for each row
         %   for each element of the row except for leftmost
         %       height_value = previous_height_value + corresponding_p_value
+        
         
 
        
