@@ -6,7 +6,7 @@ disp('Part 1: Photometric Stereo')
 
 % obtain many images in a fixed view under different illumination
 disp('Loading images...')
-image_dir = './photometrics_images/SphereGray5/';   % TODO: get the path of the script
+image_dir = './photometrics_images/MonkeyGray/';   % TODO: get the path of the script
 %image_ext = '*.png';
 
 [image_stack, scriptV] = load_syn_images(image_dir);
@@ -22,7 +22,7 @@ disp('Computing surface albedo and normal map...')
 disp('Integrability checking')
 [p, q, SE] = check_integrability(normals);
 
-threshold = 0.005;
+threshold = 0.05;
 SE(SE <= threshold) = NaN; % for good visualization
 fprintf('Number of outliers: %d\n\n', sum(sum(SE > threshold)));
 

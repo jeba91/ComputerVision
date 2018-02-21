@@ -11,7 +11,7 @@ function [ albedo, normal ] = estimate_alb_nrm( image_stack, scriptV, shadow_tri
 
 [h, w, ~] = size(image_stack);
 if nargin == 2
-    shadow_trick = true;
+    shadow_trick = false;
 end
 
 % create arrays for 
@@ -21,7 +21,6 @@ albedo = zeros(h, w, 1);
 normal = zeros(h, w, 3);
 
 % =========================================================================
-% YOUR CODE GOES HERE
 % for each point in the image array
 %   stack image values into a vector i
 %   construct the diagonal matrix scriptI
@@ -31,13 +30,18 @@ normal = zeros(h, w, 3);
 
 for m = 1 : h
     for n = 1 : w
-        i = squeeze(image_stack(m, n, :)) ;
+        i = squeeze(image_stack(m, n, :));
         scriptI = diag(i) ;
-        scriptI_i = scriptI * i ;
-        scriptI_V = scriptI * scriptV ;
+        if shadow_trick
+            scriptI_i = scriptI * i ;
+			scriptI_V = scriptI * scriptV ;
+		else
+            scriptI_i = i ;
+			scriptI_V = scriptV ;
+        end
         [g, ~] = linsolve(scriptI_V, scriptI_i) ;
         albedo(m, n, :) = norm(g) ;
-        normal(m, n, :) = g / norm(g) ;
+        normal(m, n, :) = g./ norm(g) ;
     end
 end
 end

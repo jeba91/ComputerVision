@@ -8,7 +8,7 @@ function [ p, q, SE ] = check_integrability( normals )
 % initalization
 p = zeros(size(normals,1), size(normals, 2));
 q = zeros(size(normals,1), size(normals, 2));
-SE = zeros(size(normals,1), size(normals, 2));
+% SE = zeros(size(normals,1), size(normals, 2));
 [h, w, ~] = size(normals) ;
 % ========================================================================
 % YOUR CODE GOES HERE
@@ -40,10 +40,8 @@ q(isnan(q)) = 0;
 
 dp = [zeros(h,1), diff(p,1,2)];
 dq = [zeros(h,1), diff(q,1,2)];
-disp(size(dp))
 
 SE = (dp - dq).^2;
-% disp(size(SE))
 % ========================================================================
 
 
