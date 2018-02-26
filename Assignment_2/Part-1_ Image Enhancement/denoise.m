@@ -7,7 +7,7 @@ switch kernel_type
     case 'median'
         imOut = medfilt2(image,[varargin{1} varargin{2}]);
     case 'gaussian'
-        fprintf('Not implemented\n')
+        imOut = gauss2D(image, varargin{1})
 end
 
 return

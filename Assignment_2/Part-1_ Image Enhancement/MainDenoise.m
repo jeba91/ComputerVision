@@ -20,6 +20,10 @@ Igaumedian3 = denoise(Igau , 'median', 3,3);
 Igaumedian5 = denoise(Igau , 'median', 5,5);
 Igaumedian7 = denoise(Igau , 'median', 7,7);
 
+Igauss2d1 = denoise(Igau , 'gaussian', 0.5);
+Igauss2d2 = denoise(Igau , 'gaussian', 1);
+Igauss2d3 = denoise(Igau , 'gaussian', 2);
+
 subplot(4,3,1), imshow(Ispbox3)
 subplot(4,3,2), imshow(Ispbox5)
 subplot(4,3,3), imshow(Ispbox7)
@@ -51,5 +55,11 @@ spmedian7 = myPSNR(I, Ispmedian7)
 gaumedian3 = myPSNR(I, Igaumedian3)
 gaumedian5 = myPSNR(I, Igaumedian5)
 gaumedian7 = myPSNR(I, Igaumedian7)
+
+gaugauss1 = myPSNR(I, Igauss2d1)
+gaugauss2 = myPSNR(I, Igauss2d2)
+gaugauss3 = myPSNR(I, Igauss2d3)
+
+
 
 
