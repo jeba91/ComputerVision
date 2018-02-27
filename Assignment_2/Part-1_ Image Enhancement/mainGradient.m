@@ -1,2 +1,2 @@
-I = imread('image1.jpg');
-compute_gradient(I)
+I = imread('image2.jpg');
+compute_gradient(I);
