@@ -82,7 +82,6 @@ rotMat(1,1) = cos(theta);
 rotMat(2,2) = cos(theta);
 rotMat(1,2) = -sin(theta);
 rotMat(2,1) = sin(theta);
-disp(rotMat)
 end
 
 % ----------------------------------------------------------

@@ -1,7 +1,7 @@
 %% Hyperparameters
 k        = 2;      % number of clusters in k-means algorithm. By default, 
                    % we consider k to be 2 in foreground-background segmentation task.
-image_id = 'Kobi'; % Identifier to switch between input images.
+image_id = 'Robin-1'; % Identifier to switch between input images.
                    % Possible ids: 'Kobi',    'Polar', 'Robin-1'
                    %               'Robin-2', 'Cows'
 
@@ -41,6 +41,8 @@ end
 % Image adjustments
 img      = imresize(img,resize_factor);
 img_gray = rgb2gray(img);
+img_gray = im2double(img_gray);
+img      = im2double(img);
 
 % Display image
 figure(1), imshow(img), title(sprintf('Input image: %s', image_id));
@@ -94,9 +96,6 @@ for ii = 1:length(lambdas)
             
             % Create a Gabor filter with the specs above. 
             % (We also record the settings in which they are created. )
-            % // TODO: Implement the function createGabor() following
-            %          the guidelines in the given function template.
-            %          ** See createGabor.m for instructions ** //
             gaborFilterBank(filterNo).filterPairs = createGabor( sigma, theta, lambda, psi, gamma );
             gaborFilterBank(filterNo).sigma       = sigma;
             gaborFilterBank(filterNo).lambda      = lambda;
@@ -133,10 +132,9 @@ fprintf('--------------------------------------\n')
 %            explain what works better and why shortly in the report.
 featureMaps = cell(length(gaborFilterBank),1);
 for jj = 1 : length(gaborFilterBank)
-    real_out =  % \\TODO: filter the grayscale input with real part of the Gabor
-    imag_out =  % \\TODO: filter the grayscale input with imaginary part of the Gabor
+    real_out =  imfilter(img_gray, gaborFilterBank(jj).filterPairs(:,:,1), 'replicate');
+    imag_out =  imfilter(img_gray, gaborFilterBank(jj).filterPairs(:,:,2), 'replicate');
     featureMaps{jj} = cat(3, real_out, imag_out);
-    
     % Visualize the filter responses if you wish.
     if visFlag
         figure(2),
@@ -146,7 +144,7 @@ for jj = 1 : length(gaborFilterBank)
         subplot(122), imshow(imag_out), title(sprintf('Im[h(x,y)], \\lambda = %f, \\theta = %f, \\sigma = %f',gaborFilterBank(jj).lambda,...
                                                                                                               gaborFilterBank(jj).theta,...
                                                                                                               gaborFilterBank(jj).sigma));
-        pause(1)
+        pause(.05)
     end
 end
 
@@ -157,18 +155,18 @@ end
 featureMags =  cell(length(gaborFilterBank),1);
 for jj = 1:length(featureMaps)
     real_part = featureMaps{jj}(:,:,1);
-    imag_part = featureMaps{jj}(:,:,2);
-    featureMags{jj} = % \\TODO: Compute the magnitude here
-    
+    imag_part = featureMaps{jj}(:,:,2);    
+    featureMags{jj} = (real_part.^2 + imag_part.^2).^(1/2);
     % Visualize the magnitude response if you wish.
     if visFlag
         figure(3), 
         imshow(uint8(featureMags{jj})), title(sprintf('Re[h(x,y)], \\lambda = %f, \\theta = %f, \\sigma = %f',gaborFilterBank(jj).lambda,...
                                                                                                               gaborFilterBank(jj).theta,...
                                                                                                               gaborFilterBank(jj).sigma));
-        pause(.3)    
+        pause(0.3)    
     end
 end
+
 
 %% Prepare and Preprocess features 
 % You can think of each filter response as a sort of feature representation
@@ -183,11 +181,10 @@ end
 % \\ Hint: doc imfilter, doc fspecial or doc imgaussfilt.  
 features = zeros(numRows, numCols, length(featureMags));
 if smoothingFlag
-    % \\TODO:
-    %FOR_LOOP
-        % i)  filter the magnitude response with appropriate Gaussian kernels
-        % ii) insert the smoothed image into features(:,:,jj)
-    %END_FOR
+    for jj = 1:length(featureMags)
+        featureMags{jj} = imgaussfilt(featureMags{jj}, gaborFilterBank(jj).sigma);
+        features(:,:,jj) = featureMags{jj};
+    end
 else
     % Don't smooth but just insert magnitude images into the matrix
     % called features.
@@ -208,9 +205,10 @@ features = reshape(features, numRows * numCols, []);
 % \\ Hint: see http://ufldl.stanford.edu/wiki/index.php/Data_Preprocessing
 %          for more information. \\
 
-features = % \\ TODO: i)  Implement standardization on matrix called features. 
-           %          ii) Return the standardized data matrix.
-
+for jj = 1:size(features,2)
+    features(:,jj) = features(:,jj) - mean(features(:,jj));
+    features(:,jj) = features(:,jj) / std(features(:,jj));
+end
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
@@ -227,7 +225,7 @@ imshow(feature2DImage,[]), title('Pixel representation projected onto first PC')
 % \\ Hint-2: use the parameter k defined in the first section when calling
 %            MATLAB's built-in kmeans function.
 tic
-pixLabels = % \\TODO: Return cluster labels per pixel
+pixLabels = kmeans(features, k); % \\TODO: Return cluster labels per pixel
 ctime = toc;
 fprintf('Clustering completed in %.3f seconds.\n', ctime);
 
