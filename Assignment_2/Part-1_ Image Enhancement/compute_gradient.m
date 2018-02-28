@@ -24,9 +24,15 @@ im_magnitude = sqrt((Gx.^2) + (Gy.^2));
 im_direction = 1./(tan(Gx./Gy));
 
 subplot(2,2,1),imshow(Gx)
+title('Gradient x-direction')
 subplot(2,2,2),imshow(Gy)
+title('Gradient y-direction')
 subplot(2,2,3),imshow(im_magnitude)
+title('Gradient magnitude pixel')
 subplot(2,2,4),imshow(im_direction)
+title('Gradient direction pixel')
+
+saveas(gcf,'gradient.png')
 
 end
 

@@ -24,39 +24,55 @@ Igaumedian5 = denoise(Igau , 'median', 5,5);
 Igaumedian7 = denoise(Igau , 'median', 7,7);
 
 %Gaussian images denoise with gaussian filter
+Igauss2d0 = denoise(Igau , 'gaussian', 0.25, 3);
 Igauss2d1 = denoise(Igau , 'gaussian', 0.5, 3);
 Igauss2d2 = denoise(Igau , 'gaussian', 1, 3);
 Igauss2d3 = denoise(Igau , 'gaussian', 2, 3);
+Igauss2d4 = denoise(Igau , 'gaussian', 3, 3);
 
 %Plot box filter images
-subplot(4,3,1), imshow(Ispbox3)
+subplot(1,3,1), imshow(Ispbox3)
 title('S&P box 3x3')
-subplot(4,3,2), imshow(Ispbox5)
+subplot(1,3,2), imshow(Ispbox5)
 title('S&P box 5x5')
-subplot(4,3,3), imshow(Ispbox7)
+subplot(1,3,3), imshow(Ispbox7)
 title('S&P box 7x7')
-subplot(4,3,4), imshow(Igaubox3)
+saveas(gcf,'filters1.png')
+
+subplot(1,3,1), imshow(Igaubox3)
 title('Gauss box 3x3')
-subplot(4,3,5), imshow(Igaubox5)
+subplot(1,3,2), imshow(Igaubox5)
 title('Gauss box 5x5')
-subplot(4,3,6), imshow(Igaubox7)
+subplot(1,3,3), imshow(Igaubox7)
 title('Gauss box 7x7')
+saveas(gcf,'filters2.png')
 
 %Plot median filter images
-subplot(4,3,7), imshow(Ispmedian3)
+subplot(1,3,1), imshow(Ispmedian3)
 title('S&P median 3x3')
-subplot(4,3,8), imshow(Ispmedian5)
+subplot(1,3,2), imshow(Ispmedian5)
 title('S&P median 5x5')
-subplot(4,3,9), imshow(Ispmedian7)
+subplot(1,3,3), imshow(Ispmedian7)
 title('S&P median 7x7')
-subplot(4,3,10), imshow(Igaumedian3)
+saveas(gcf,'filters3.png')
+
+subplot(1,3,1), imshow(Igaumedian3)
 title('Gauss median 3x3')
-subplot(4,3,11), imshow(Igaumedian5)
+subplot(1,3,2), imshow(Igaumedian5)
 title('Gauss median 5x5')
-subplot(4,3,12), imshow(Igaumedian7)
+subplot(1,3,3), imshow(Igaumedian7)
 title('Gauss median 7x7')
 
-saveas(gcf,'filters.png')
+saveas(gcf,'filters4.png')
+
+subplot(1,3,1), imshow(Igauss2d1)
+title('Gauss gaussian2d 0.5')
+subplot(1,3,2), imshow(Igauss2d2)
+title('Gauss gaussian2d 1')
+subplot(1,3,3), imshow(Igauss2d3)
+title('Gauss gaussian2d 2')
+
+saveas(gcf,'filters5.png')
 
 %PSNR of box filter images
 spbox3 = myPSNR(I, Ispbox3)
@@ -75,9 +91,11 @@ gaumedian5 = myPSNR(I, Igaumedian5)
 gaumedian7 = myPSNR(I, Igaumedian7)
 
 %PSNR of gaussian filter images
+gaugauss0 = myPSNR(I, Igauss2d0)
 gaugauss1 = myPSNR(I, Igauss2d1)
 gaugauss2 = myPSNR(I, Igauss2d2)
 gaugauss3 = myPSNR(I, Igauss2d3)
+gaugauss4 = myPSNR(I, Igauss2d4)
 
 
 
