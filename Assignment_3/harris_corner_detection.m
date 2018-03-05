@@ -5,16 +5,18 @@ function [H, r, c] = harris_corner_detection(img_path)
 
 % Suppress error for memory pre-allocation
 %#ok<*AGROW>
-
 %% params
 kernel_size = 5;
-sigma = 1.7;
-window_size = 5;
-threshold = 3e-8;
+sigma = 1.5;
+window_size = 8;
+threshold = 4e-8;
 % rotate image flag
-rotate_img = true;
+rotate_img = false;
 
 %% image operations
+if nargin == 0
+    img_path = 'person_toy/00000001.jpg';
+end
 imgin = imread(img_path);
 if rotate_img
     angle = rand * 360;
