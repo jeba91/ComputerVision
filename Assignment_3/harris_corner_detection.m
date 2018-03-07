@@ -7,9 +7,9 @@ function [H, r, c] = harris_corner_detection(img_path)
 %#ok<*AGROW>
 %% params
 kernel_size = 5;
-sigma = 1.5;
-window_size = 8;
-threshold = 4e-8;
+sigma = 1.7;
+window_size = 10;
+threshold = 2e-7;
 % rotate image flag
 rotate_img = false;
 plot_flag = false;
@@ -52,8 +52,8 @@ for i = 1 + window_size: size(H,1) - window_size
 end
 
 %% Plots
+close all;
 if plot_flag
-    close all;
     figure('Name', 'Ix', 'NumberTitle', 'off')
     imshow(Ix, [min(Ix(:)), max(Ix(:))]); 
     figure('Name', 'Iy', 'NumberTitle', 'off')
