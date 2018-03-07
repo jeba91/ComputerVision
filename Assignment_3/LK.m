@@ -8,12 +8,11 @@ function [V] = LK(im1, im2, regionsize, list1, list2)
     im2 = (im2double(im2));
     
     if exist('list1') == 1
-        V = zeros(length(list1), 2)
+        V = zeros(2, length(list1));
         for m = 1:length(list1)
-            V(m,:) = LucasKanade(im1,im2,regionsize,[list1(m),list2(m)]);
+            V(:,m) = LucasKanade(im1,im2,regionsize,[list1(m),list2(m)]);
         end
-        [x,y] = meshgrid(list1,list2);
-        quiver(x,y,V(1,:),V(2,:));
+        quiver(list2,list1,V(1,:),V(2,:));
     else
         if mod(size(im1,1),regionsize) ~= 0
             end_m = (size(im1,1) - mod(size(im1,1),regionsize)) - regionsize+1;
