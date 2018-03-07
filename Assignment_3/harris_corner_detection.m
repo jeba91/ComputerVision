@@ -12,7 +12,7 @@ window_size = 8;
 threshold = 4e-8;
 % rotate image flag
 rotate_img = false;
-plot_flag = false;
+plot_flag = true;
 
 %% image operations
 if nargin == 0
@@ -52,17 +52,16 @@ for i = 1 + window_size: size(H,1) - window_size
 end
 
 %% Plots
-if plotflag
+if plot_flag
     close all;
     figure('Name', 'Ix', 'NumberTitle', 'off')
     imshow(Ix, [min(Ix(:)), max(Ix(:))]); 
     figure('Name', 'Iy', 'NumberTitle', 'off')
     imshow(Iy, [min(Iy(:)), max(Iy(:))])
-
+    hold off;
     figure('Name', 'Harris Corners', 'NumberTitle', 'off')
     imshow(imgin);
     hold on;
     scatter(c, r, 80, 'r', 'Marker', '.')
-    hold off;
 end
 end
