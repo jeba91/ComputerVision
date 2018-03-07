@@ -1,3 +1,4 @@
+%Read in images, convert sphere images to grayscale voor LK algorithm
 sphere1 = imread('sphere1.ppm');
 sphere2 = imread('sphere2.ppm');
 
@@ -7,16 +8,18 @@ sphere2gr = rgb2gray(sphere2);
 synth1 = imread('synth1.pgm');
 synth2 = imread('synth2.pgm');
 
-region = 15;
+%Region size paramter
+region = 5;
 
-%V1  = LK(sphere1gr,sphere2gr,region);
-%visualize(sphere1, V1, region);
+%Use LK algorithm on sphere image
+V1  = LK(sphere1gr,sphere2gr,region);
+visualize(sphere1, V1, region);
 
-%V2  = LK(synth1,synth2,region);
-%visualize(synth1, V2, region);
+%Use LK algoritm on synth image
+V2  = LK(synth1,synth2,region);
+visualize(synth1, V2, region);
 
-%V3 = LK(sphere1gr,sphere2gr,region,[15 30 45 60 75],[75 75 75 75 75])
-
+%Function to visualize sections arrow on images
 function [] = visualize(im, V, regionsize)
 
     middle = 1+ ((regionsize - mod(regionsize,2)) / 2);
@@ -30,4 +33,6 @@ function [] = visualize(im, V, regionsize)
     RI.XWorldLimits = [0 size(im,1)]; RI.YWorldLimits = [0 size(im,2)];
     figure; imshow(im,RI); hold on; quiver(x,y,V(:,:,1),V(:,:,2));
     
+    
+    saveas(gcf,'sphere5.png')
 end
