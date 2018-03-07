@@ -15,23 +15,33 @@ rotate_img = false;
 plot_flag = false;
 
 %% image operations
+
+% if no file path is given, use standard image
 if nargin == 0
     img_path = 'person_toy/00000001.jpg';
 end
+
+% read image
 imgin = imread(img_path);
+
+% rotate if asked
 if rotate_img
     angle = rand * 360;
     imgin = imrotate(imgin, angle);
 end
-img = im2double(imgin);
-img = rgb2gray(img);
+img = rgb2gray(imgin);
+img = im2double(img);
+
 
 %% calculate Ix, A, B, C and H
 G = fspecial('gaussian', kernel_size, sigma);
 [Gx, Gy] = gradient(G);
+
+% convolve f.o. gaussian derivatives with image along each direction
 Ix = conv2(img, Gx, 'same');
 Iy = conv2(img, Gy, 'same');
 
+% convolve smoothed derivatives with gaussian
 A = conv2(Ix.^2, G, 'same');
 B = conv2(Ix.*Iy, G, 'same');
 C = conv2(Iy.^2, G, 'same');
@@ -53,6 +63,8 @@ end
 
 %% Plots
 close all;
+
+% If all plots need to be done, plot I_x and I_y
 if plot_flag
     figure('Name', 'Ix', 'NumberTitle', 'off')
     imshow(Ix, [min(Ix(:)), max(Ix(:))]); 
@@ -64,5 +76,4 @@ imshow(imgin);
 hold on;
 scatter(c, r, 80, 'r', 'Marker', '.')
 
-    
 end
