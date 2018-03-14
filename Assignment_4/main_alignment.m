@@ -1,46 +1,47 @@
 boat1 = single(imread('boat1.pgm'));
 boat2 = single(imread('boat2.pgm'));
 
-figure
-imshowpair(imread('boat1.pgm'),imread('boat2.pgm'), "montage")
-hold on;
-% 
-% [f1, d1] = vl_sift(boat1);
-% [f2, d2] = vl_sift(boat2);
-
 [f1, f2, matches] = keypoint_matching(boat1, boat2);
 
-sel = randperm(size(matches,2), 50);
+n = 1000;
+b = -1;
 
-pointim1 = matches(1,sel);
-pointim2 = matches(2,sel);
 
-points1 = f1(:,pointim1);
-points2 = f2(:,pointim2);
+for N = 1:n
+    sel = randperm(size(matches,2), 50);
+    points1 = f1(:,matches(1,sel));
+    points2 = f2(:,matches(2,sel));
+    [m, t] = RANSAC(points1, points2);
+    points2(1:2,:) = m * points2(1:2,:) + t;
+    x = points1(1,:) - points2(1,:);
+    y = points1(1,:) - points2(1,:);
+    d = sqrt(x.^2 + y.^2);
+    s = length(find(d<10));
+    if s > b
+        b = s;
+        mb = m;
+        tb = t;
+    end
+end
 
-points2(1,:) = points2(1,:) + 850;
+A = zeros(3,3);
+mb = mb'
+A(1,1:2) = mb(1:2);
+A(2,1:2) = mb(3:4);
+A(3,1:2) = tb(1:2);
+A(3,3) = 1;
 
-x = zeros(2,50);
-y = zeros(2,50);
+T = maketform('affine',A);
+B = imtransform(imread('boat2.pgm'),T);
 
-x(1,:) = points1(1,:);
-x(2,:) = points2(1,:);
-y(1,:) = points1(2,:);
-y(2,:) = points2(2,:);
+imshowpair(imread('boat1.pgm'),B, "montage")
+hold on;
 
-plot(x,y)
 
-h1 = vl_plotframe(points1);
-h2 = vl_plotframe(points1);
 
-h3 = vl_plotframe(points2);
-h4 = vl_plotframe(points2);
 
-set(h1,'color','k','linewidth',3);
-set(h2,'color','y','linewidth',1);
 
-set(h3,'color','k','linewidth',3);
-set(h4,'color','y','linewidth',1);
+
 
 
 
