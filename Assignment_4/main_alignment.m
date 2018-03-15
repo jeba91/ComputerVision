@@ -6,9 +6,9 @@ boat2 = single(imread('boat2.pgm'));
 [f1, f2, matches] = keypoint_matching(boat1, boat2);
 
 %paramters
-iterations = 10000;
+iterations = 1000;
 current_best = -1;
-threshold = 10 %10 pixels
+threshold = 100; %10 pixels
 
 
 for N = 1:iterations
@@ -39,6 +39,8 @@ for N = 1:iterations
     end
 end
 
+current_best
+
 %Fill in transformation parameters for affine2D
 A = zeros(3,3);
 A(1,1:2) = mb(1:2);
@@ -52,7 +54,7 @@ B = imwarp(imread('boat1.pgm'),T);
 imshowpair(imread('boat2.pgm'),B, 'montage')
 
 %transform from boat2 to boat1 (invert used)
-T = invert(T)
+T = invert(T);
 B = imwarp(imread('boat2.pgm'),T);
 imshowpair(imread('boat1.pgm'),B, 'montage')
 
