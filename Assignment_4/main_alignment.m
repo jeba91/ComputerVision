@@ -1,11 +1,14 @@
 %images
-boat1 = single(imread('boat1.pgm'));
-boat2 = single(imread('boat2.pgm'));
+boat1 = imread('boat1.pgm');
+boat2 = imread('boat2.pgm');
+
+boat1s = single(boat1);
+boat2s = single(boat2);
 
 %get scores
-[f1, f2, matches] = keypoint_matching(boat1, boat2);
+[f1, f2, matches] = keypoint_matching(boat1s, boat2s);
 
-%paramters
+%parameters
 iterations = 1000;
 current_best = -1;
 threshold = 100; %10 pixels
@@ -39,24 +42,23 @@ for N = 1:iterations
     end
 end
 
-current_best
-
 %Fill in transformation parameters for affine2D
 A = zeros(3,3);
-A(1,1:2) = mb(1:2);
-A(2,1:2) = mb(3:4);
-A(3,1:2) = tb(1:2);
+A(1,1:2) = mbest(1:2);
+A(2,1:2) = mbest(3:4);
+A(3,1:2) = tbest(1:2);
 A(3,3) = 1;
 
 %transform from boat1 to boat2
 T = affine2d(A);
-B = imwarp(imread('boat1.pgm'),T);
-imshowpair(imread('boat2.pgm'),B, 'montage')
+B = imwarp(boat1,T);
+imshowpair(boat2,B, 'montage')
 
 %transform from boat2 to boat1 (invert used)
 T = invert(T);
-B = imwarp(imread('boat2.pgm'),T);
-imshowpair(imread('boat1.pgm'),B, 'montage')
+B = imwarp(boat2,T);
+imshowpair(boat1,B, 'montage')
+
 
 %run('C:\Program Files\MATLAB\R2017b\src\vlfeat/toolbox/vl_setup')
 
