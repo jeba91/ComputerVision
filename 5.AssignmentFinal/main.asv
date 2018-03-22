@@ -11,7 +11,7 @@ train_airplanes = read_in_file_names('Caltech4/ImageSets/airplanes_train.txt');
 %Different settings
 color_spaces = {'rgb', 'RGB', 'gray', 'opponent'};
 kernel_size = [400, 800, 1600, 2000, 4000];
-N = 2;         %number of images visual dictionary
+N = 5;         %number of images visual dictionary
 
 %Cell array with all image paths voor vocubulary
 voc_ims = [train_motorbikes(1:N) ; train_faces(1:N) ; train_cars(1:N) ; train_airplanes(1:N) ];
@@ -38,10 +38,11 @@ for c = 1:length(color_spaces)
     for k = 1:length(kernel_size)
         [centers, ~] = vl_kmeans(total,kernel_size(k));
         [centers_dense, ~] = vl_kmeans(total_dense,kernel_size(k));
-        savename = strcat('kmeans/',num2str(kernel_size(k)),color_spaces{c},'.mat')
-        savename_dense = strcat('kmeans/',num2str(kernel_size(k)),color_spaces{c},'_dense','.mat')
-        save(savename,'centers')
-        save(savename_dense,'centers_dense')
+        num2str(kernel_
+        savename = 'kmeans/' + num2str(kernel_size(k)) + color_spaces{c}
+        savename_dense = 'kmeans/' + num2str(kernel_size(k)) + color_spaces{c} + '_dense'
+        save(savename,centers)
+        save(savename_dense,centers)
     end
 end
 
