@@ -70,4 +70,5 @@ B  = image(:,:,3);
 im(:,:,1) = (R-G)./sqrt(2);
 im(:,:,2) = (R+G-2*B)./sqrt(6);
 im(:,:,3) = (R+G+B)./sqrt(3);
+
 end
