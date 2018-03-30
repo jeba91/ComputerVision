@@ -5,14 +5,20 @@ if strcmp(colorspace, 'rgb') == 1
     im = single(image);
 elseif strcmp(colorspace, 'RGB') == 1
     im = single(rgb2RGB(image));
-elseif strcmp(colorspace, 'gray') == 1
+elseif strcmp(colorspace, 'gray') == 1 && size(image,3) ~= 1
     im = single(rgb2gray(image));
+elseif strcmp(colorspace, 'gray') == 1 && size(image,3) == 1
+    im = single(image);
 elseif strcmp(colorspace, 'opponent') == 1
     im = single(rgb2OPP(image));
 end
 
 %Get features from grayscale images for descriptors in seperate layers
-[f] = vl_sift(single(rgb2gray(image)));
+if size(image,3) ~= 1
+    [f] = vl_sift(single(rgb2gray(image)));
+else
+    [f] = vl_sift(single(image));
+end
 
 %If the image has more than 3 dimensions
 if size(im,3) == 3

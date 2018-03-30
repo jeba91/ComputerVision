@@ -9,8 +9,10 @@ train_cars = read_in_file_names('Caltech4/ImageSets/cars_train.txt');
 train_airplanes = read_in_file_names('Caltech4/ImageSets/airplanes_train.txt');
 
 %Different settings
+%, 'RGB', 'gray', 'opponent'
 color_spaces = {'rgb', 'RGB', 'gray', 'opponent'};
-kernel_size = [400, 800, 1600, 2000, 4000];
+% 400, 800, 1600, 2000, 
+kernel_size = [4000];
 N = 150;         %number of images visual dictionary
 
 %Cell array with all image paths voor vocubulary
@@ -44,15 +46,13 @@ for c = 1:length(color_spaces)
     for k = 1:length(kernel_size)
         fprintf('\n %d ', k);
         [centers, ~] = vl_kmeans(total,kernel_size(k),'algorithm', 'elkan');
-        [centers_dense, ~] = vl_kmeans(total_dense,4000(k),'algorithm', 'elkan');
+        [centers_dense, ~] = vl_kmeans(total_dense,kernel_size(k),'algorithm', 'elkan');
         savename = strcat('kmeans/',num2str(kernel_size(k)),'_',num2str(c),color_spaces{c},'.mat');
         savename_dense = strcat('kmeans/',num2str(kernel_size(k)),'_',num2str(c),color_spaces{c},'_dense','.mat');
         save(savename,'centers')
         save(savename_dense,'centers_dense')
     end
 end
-
-
 
 
 %run('C:\Program Files\MATLAB\R2017b\src\vlfeat/toolbox/vl_setup')
