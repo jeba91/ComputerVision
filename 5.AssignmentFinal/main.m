@@ -10,7 +10,7 @@ train_airplanes = read_in_file_names('Caltech4/ImageSets/airplanes_train.txt');
 
 %Different settings
 %, 'RGB', 'gray', 'opponent'
-color_spaces = {'rgb', 'RGB', 'gray', 'opponent'};
+color_spaces = {'gray', 'opponent'};
 % 400, 800, 1600, 2000, 
 kernel_size = [4000];
 N = 150;         %number of images visual dictionary
