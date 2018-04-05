@@ -1,8 +1,8 @@
 function [net, info, expdir] = finetune_cnn(varargin)
 
 %% Define options
-run(fullfile(fileparts(mfilename('fullpath')), ...
-  '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
+% run(fullfile(fileparts(mfilename('fullpath')), ...
+%   '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
 
 opts.modelType = 'lenet' ;
 [opts, varargin] = vl_argparse(opts, varargin) ;
@@ -20,7 +20,7 @@ opts.train = struct() ;
 opts = vl_argparse(opts, varargin) ;
 if ~isfield(opts.train, 'gpus'), opts.train.gpus = []; end;
 
-opts.train.gpus = [1];
+opts.train.gpus = [];
 
 
 
@@ -83,6 +83,40 @@ classes = {'airplanes', 'cars', 'faces', 'motorbikes'};
 splits = {'train', 'test'};
 
 %% TODO: Implement your loop here, to create the data structure described in the assignment
+
+% 50 test images per class. per class 500, 465, 400 and 500 images respecitvely
+num_images = 2065;
+% vl_simplenn_display showed an input layer of size 32
+data = zeros(32,32,3,num_images);
+labels = zeros(1, num_images);
+sets = zeros(1, num_images);
+imdb = struct;
+
+img_cnt = 0;
+for i = 1:length(classes)
+    for j = 1:length(splits)
+        prefix = '../Caltech4/ImageSets/';
+        suffix = '.txt';
+        full_file_name = strcat(prefix, classes{i},'_', splits{j}, suffix);
+        set = read_in_file_names(full_file_name);
+        for k = 1:length(set)
+            img_cnt = img_cnt + 1;
+            image = imread(strcat('../',char(set(k))));
+            image = im2single(image);
+            if size(image, 3) == 1
+                image = cat(3, image, image, image);
+            end
+            image = imresize(image, [32 32]);
+            data(:,:,:,img_cnt) = image;
+            labels(1, img_cnt) = i;
+            sets(1, img_cnt) = j;
+        end
+    end
+end
+
+labels = single(labels);
+sets = single(sets);
+data = single(data);
 
 
 %%

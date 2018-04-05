@@ -1,4 +1,5 @@
-function train_svm(nets, data)
+function [pre_trained_train, pre_trained_test,...
+    fine_tuned_train, fine_tuned_test] = train_svm(nets, data)
 
 %% replace loss with the classification as we will extract features
 nets.pre_trained.layers{end}.type = 'softmax';
@@ -16,6 +17,11 @@ nets.fine_tuned.layers{end}.type = 'softmax';
 fprintf('\n\n\n\n\n\n\n\n');
 
 fprintf('CNN: fine_tuned_accuracy: %0.2f, SVM: pre_trained_accuracy: %0.2f, fine_tuned_accuracy: %0.2f\n', nn.accuracy, svm.pre_trained.accuracy(1), svm.fine_tuned.accuracy(1));
+
+pre_trained_train = svm.pre_trained.trainset;
+pre_trained_test = svm.pre_trained.testset;
+fine_tuned_train = svm.fine_tuned.trainset;
+fine_tuned_test = svm.fine_tuned.testset;
 
 end
 
