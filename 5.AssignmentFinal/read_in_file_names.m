@@ -7,7 +7,7 @@ tline = fgetl(fid);
 images = cell(length_file,1);
 
 for i = 1:size(images,1)
-    tline = strcat('Caltech4/ImageData/', strcat(char(tline), '.jpg'));
+    tline = strcat(char(tline), '.jpg');
     images(i,1) = {tline};
     tline = fgetl(fid);
 end

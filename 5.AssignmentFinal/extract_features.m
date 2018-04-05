@@ -3,8 +3,9 @@ function [features] = extract_features(image, colorspace, dense)
 %Save images in cell array for for-loop
 if strcmp(colorspace, 'rgb') == 1
     im = single(image);
-elseif strcmp(colorspace, 'RGB') == 1
+elseif strcmp(colorspace,'RGB') == 1
     im = single(rgb2RGB(image));
+    im(isnan(im)) = 0;
 elseif strcmp(colorspace, 'gray') == 1 && size(image,3) ~= 1
     im = single(rgb2gray(image));
 elseif strcmp(colorspace, 'gray') == 1 && size(image,3) == 1
@@ -14,10 +15,8 @@ elseif strcmp(colorspace, 'opponent') == 1
 end
 
 %Get features from grayscale images for descriptors in seperate layers
-if size(image,3) ~= 1
-    [f] = vl_sift(single(rgb2gray(image)));
-else
-    [f] = vl_sift(single(image));
+if size(im,3) ~= 1
+    [f, ~] = vl_sift(rgb2gray(image));
 end
 
 %If the image has more than 3 dimensions
